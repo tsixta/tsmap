@@ -138,10 +138,26 @@ public:
         return(ret);
     }
     //-----------------------------------------------------------------------------
+    std::pair<iterator,bool> insert (value_type&& val)
+    {
+        this->rwl.lock_write();
+        auto ret=this->std::map<Key, T, Compare, Alloc>::insert(std::move(val));
+        this->rwl.unlock_write();
+        return(ret);
+    }
+    //-----------------------------------------------------------------------------
     iterator insert (iterator position, const value_type& val)
     {
         this->rwl.lock_write();
         auto ret=this->std::map<Key, T, Compare, Alloc>::insert(position, val);
+        this->rwl.unlock_write();
+        return(ret);
+    }
+    //-----------------------------------------------------------------------------
+    iterator insert (iterator position, value_type&& val)
+    {
+        this->rwl.lock_write();
+        auto ret=this->std::map<Key, T, Compare, Alloc>::insert(position, std::move(val));
         this->rwl.unlock_write();
         return(ret);
     }
