@@ -111,9 +111,9 @@ public:
 
     mapped_type& at (const key_type& k)
     {
-        this->rwl.lock_write();
+        this->rwl.lock_read();
         std::shared_ptr<void> defer(nullptr,[&](void* pi) {
-            this->rwl.unlock_write();
+            this->rwl.unlock_read();
         }); // deleter
         
         return this->std::map<Key, T, Compare, Alloc>::at(k);
@@ -122,9 +122,9 @@ public:
     //-----------------------------------------------------------------------------
     const mapped_type& at (const key_type& k) const
     {
-        this->rwl.lock_write();
+        this->rwl.lock_read();
         std::shared_ptr<void> defer(nullptr,[&](void* pi) {
-            this->rwl.unlock_write();
+            this->rwl.unlock_read();
         }); // deleter
         
         return this->std::map<Key, T, Compare, Alloc>::at(k);
